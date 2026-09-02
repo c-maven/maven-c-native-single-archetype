@@ -7,7 +7,7 @@
     <!-- 发布时请改成你自己的域名反写 -->
     <groupId>com.weiweixu.archetypes</groupId>
     <artifactId>maven-c-native-single-archetype</artifactId>
-    <version>1.0.0</version>
+    <version>0.0.1</version>
     <packaging>maven-archetype</packaging>
 
     <name>Maven C Native Single Archetype</name>
