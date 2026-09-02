@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- 发布时请改成你自己的域名反写 -->
+    <groupId>com.weiweixu.archetypes</groupId>
+    <artifactId>maven-c-native-single-archetype</artifactId>
+    <version>1.0.0</version>
+    <packaging>maven-archetype</packaging>
+
+    <name>Maven C Native Single Archetype</name>
+    <description>使用 Maven native-maven-plugin 构建 C 项目的 Archetype</description>
+    <url>https://github.com/c-maven/maven-c-native-single-archetype</url>
+
+    <scm>
+        <connection>scm:git:https://github.com/c-maven/maven-c-native-single-archetype.git</connection>
+        <developerConnection>scm:git:git@github.com:c-maven/maven-c-native-single-archetype.git</developerConnection>
+        <url>https://github.com/c-maven/maven-c-native-single-archetype</url>
+    </scm>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.archetype.version>3.4.1</maven.archetype.version>
+        <maven.deploy.version>3.1.4</maven.deploy.version>
+        <maven.resources.version>3.3.1</maven.resources.version>
+    </properties>
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub c-maven Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/c-maven/maven-c-native-single-archetype</url>
+        </repository>
+    </distributionManagement>
+
+    <build>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.archetype</groupId>
+                <artifactId>archetype-packaging</artifactId>
+                <version>${maven.archetype.version}</version>
+            </extension>
+        </extensions>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>${maven.deploy.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${maven.resources.version}</version>
+                <configuration>
+                    <!-- Archetype 需要把 .gitignore 一起打入模板。 -->
+                    <addDefaultExcludes>false</addDefaultExcludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-archetype-plugin</artifactId>
+                <version>${maven.archetype.version}</version>
+                <configuration>
+                    <useDefaultExcludes>false</useDefaultExcludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

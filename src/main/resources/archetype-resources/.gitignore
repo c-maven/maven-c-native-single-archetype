@@ -1,0 +1,11 @@
+/target/
+/cmake-build-*/
+/.idea/
+*.exe
+*.o
+*.obj
+*.a
+*.lib
+*.dll
+*.so
+*.dylib

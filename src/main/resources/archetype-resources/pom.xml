@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>${groupId}</groupId>
+    <artifactId>${artifactId}</artifactId>
+    <version>${version}</version>
+    <!-- Optional values: dll, exe, lib, a, o, so, sl, dylib, uexe. -->
+    <packaging>${native.packaging}</packaging>
+
+    <name>${artifactId}</name>
+    <description>C23 project built by Maven native-maven-plugin</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <native-maven-plugin.version>1.0.0</native-maven-plugin.version>
+        <c.standard>c2x</c.standard>
+    </properties>
+
+    <profiles>
+        <profile>
+            <id>windows</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+            <properties>
+                <native.packaging>exe</native.packaging>
+                <c.compiler>clang</c.compiler>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>linux</id>
+            <activation>
+                <os>
+                    <family>unix</family>
+                </os>
+            </activation>
+            <properties>
+                <native.packaging>uexe</native.packaging>
+                <c.compiler>clang</c.compiler>
+            </properties>
+        </profile>
+    </profiles>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.5.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.15.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>3.1.4</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>3.1.4</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>native-maven-plugin</artifactId>
+                <version>${native-maven-plugin.version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <compilerProvider>generic</compilerProvider>
+                    <compilerExecutable>${c.compiler}</compilerExecutable>
+                    <linkerProvider>generic</linkerProvider>
+                    <linkerExecutable>${c.compiler}</linkerExecutable>
+
+                    <compilerStartOptions>
+                        <compilerStartOption>-std=${c.standard}</compilerStartOption>
+                        <compilerStartOption>-Wall</compilerStartOption>
+                        <compilerStartOption>-Wextra</compilerStartOption>
+                        <compilerStartOption>-Wpedantic</compilerStartOption>
+                    </compilerStartOptions>
+
+                    <sources>
+                        <source>
+                            <directory>src/main/c</directory>
+                            <includes>
+                                <include>**/*.c</include>
+                            </includes>
+                        </source>
+                        <source>
+                            <directory>src/main/include</directory>
+                            <dependencyAnalysisParticipation>false</dependencyAnalysisParticipation>
+                        </source>
+                    </sources>
+
+                    <compilerOutputDirectory>${project.build.directory}/objs</compilerOutputDirectory>
+                    <linkerOutputDirectory>${project.build.directory}</linkerOutputDirectory>
+                    <linkerFinalName>${project.artifactId}</linkerFinalName>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
