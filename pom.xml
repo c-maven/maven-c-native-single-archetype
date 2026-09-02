@@ -4,8 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- 发布时请改成你自己的域名反写 -->
-    <groupId>com.weiweixu.archetypes</groupId>
+    <groupId>io.github.aurorxa</groupId>
     <artifactId>maven-c-native-single-archetype</artifactId>
     <version>0.0.1</version>
     <packaging>maven-archetype</packaging>
@@ -13,6 +12,22 @@
     <name>Maven C Native Single Archetype</name>
     <description>使用 Maven native-maven-plugin 构建 C 项目的 Archetype</description>
     <url>https://github.com/c-maven/maven-c-native-single-archetype</url>
+
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>Aurorxa</id>
+            <name>Aurorxa</name>
+            <url>https://github.com/Aurorxa</url>
+        </developer>
+    </developers>
 
     <scm>
         <connection>scm:git:https://github.com/c-maven/maven-c-native-single-archetype.git</connection>
@@ -22,18 +37,15 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <central.publishing.maven.plugin.version>0.11.0</central.publishing.maven.plugin.version>
+        <central.autoPublish>false</central.autoPublish>
+        <central.waitUntil>validated</central.waitUntil>
         <maven.archetype.version>3.4.1</maven.archetype.version>
         <maven.deploy.version>3.1.4</maven.deploy.version>
+        <maven.gpg.version>3.2.8</maven.gpg.version>
+        <maven.jar.version>3.4.2</maven.jar.version>
         <maven.resources.version>3.3.1</maven.resources.version>
     </properties>
-
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <name>GitHub c-maven Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/c-maven/maven-c-native-single-archetype</url>
-        </repository>
-    </distributionManagement>
 
     <build>
         <extensions>
@@ -72,4 +84,96 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>github-packages</id>
+            <distributionManagement>
+                <repository>
+                    <id>github</id>
+                    <name>GitHub c-maven Apache Maven Packages</name>
+                    <url>https://maven.pkg.github.com/c-maven/maven-c-native-single-archetype</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+
+        <profile>
+            <id>central-release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <version>${maven.jar.version}</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources-jar</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                                <configuration>
+                                    <classifier>sources</classifier>
+                                    <classesDirectory>${project.basedir}</classesDirectory>
+                                    <includes>
+                                        <include>LICENSE</include>
+                                        <include>README.md</include>
+                                        <include>pom.xml</include>
+                                        <include>src/**</include>
+                                    </includes>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>attach-javadoc-jar</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                                <configuration>
+                                    <classifier>javadoc</classifier>
+                                    <classesDirectory>${project.basedir}</classesDirectory>
+                                    <includes>
+                                        <include>LICENSE</include>
+                                        <include>README.md</include>
+                                    </includes>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>${maven.gpg.version}</version>
+                        <configuration>
+                            <gpgArguments>
+                                <arg>--pinentry-mode</arg>
+                                <arg>loopback</arg>
+                            </gpgArguments>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>${central.publishing.maven.plugin.version}</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>central</publishingServerId>
+                            <deploymentName>${project.groupId}:${project.artifactId}:${project.version}</deploymentName>
+                            <autoPublish>${central.autoPublish}</autoPublish>
+                            <waitUntil>${central.waitUntil}</waitUntil>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
