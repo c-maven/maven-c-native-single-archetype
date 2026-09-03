@@ -6,7 +6,7 @@
 
     <groupId>io.github.aurorxa</groupId>
     <artifactId>maven-c-native-single-archetype</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
     <packaging>maven-archetype</packaging>
 
     <name>Maven C Native Single Archetype</name>
