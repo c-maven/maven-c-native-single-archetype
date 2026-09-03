@@ -1,6 +1,6 @@
 # ${artifactId}
 
-这是由 `maven-c-native-single-archetype` 生成的 C23 项目。项目结构参考 `Aurorxa/maven-c-demo`，Maven 通过 `native-maven-plugin` 完成正式构建。
+这是由 `maven-c-native-single-archetype` 生成的 C23 项目。
 
 ## 项目结构
 
